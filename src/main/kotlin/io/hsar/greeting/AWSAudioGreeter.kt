@@ -1,4 +1,4 @@
-package io.hsar.audio
+package io.hsar.greeting
 
 import com.amazonaws.services.polly.AmazonPollyClientBuilder
 import com.amazonaws.services.polly.model.SynthesizeSpeechRequest
@@ -7,7 +7,7 @@ import com.amazonaws.services.polly.model.VoiceId.Brian
 import com.amazonaws.services.polly.model.VoiceId.Emma
 import java.io.InputStream
 
-class AWSAudioGreeter {
+class AWSAudioGreeter : Greeter {
 
     companion object {
         private val VOICE_F_AMY = Amy
@@ -17,8 +17,8 @@ class AWSAudioGreeter {
 
     private val awsPollyClient = AmazonPollyClientBuilder.standard().build()
 
-    fun sendGreeting(greeting: String): InputStream {
-        return SynthesizeSpeechRequest()
+    override fun sendGreeting(greeting: String) {
+        SynthesizeSpeechRequest()
                 .withEngine("standard")
                 .withVoiceId(VOICE_F_AMY)
                 .withText(greeting)
@@ -26,5 +26,8 @@ class AWSAudioGreeter {
                     awsPollyClient.synthesizeSpeech(request)
                 }
                 .audioStream
+                .let { greetingStream ->
+                    TODO("Play audio")
+                }
     }
 }
