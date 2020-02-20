@@ -22,12 +22,15 @@ class AWSAudioGreeter : Greeter {
         private val AUDIO_FORMAT = AudioFormat(8000F, 16, 1, true, false)
     }
 
-    private val awsPollyClient = AmazonPollyClientBuilder.standard().withRegion(Regions.EU_WEST_2).build()
+    private val awsPollyClient = AmazonPollyClientBuilder
+            .standard()
+            .withRegion(Regions.EU_WEST_2)
+            .build()
 
     override fun sendGreeting(greeting: String) {
         SynthesizeSpeechRequest()
                 .withEngine("standard")
-                .withVoiceId(VOICE_F_AMY)
+                .withVoiceId(VOICE_F_EMMA)
                 .withOutputFormat(OutputFormat.Mp3)
                 .withText(greeting)
                 .let { request ->
