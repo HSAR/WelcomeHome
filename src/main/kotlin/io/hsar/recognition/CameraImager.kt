@@ -1,9 +1,12 @@
 package io.hsar.recognition
 
-import com.github.sarxos.webcam.Webcam
+import org.opencv.core.Mat
+import org.opencv.videoio.VideoCapture
 import org.slf4j.LoggerFactory
 import java.awt.image.BufferedImage
+import java.awt.image.DataBufferByte
 import java.nio.ByteBuffer
+
 
 class CameraImager {
 
@@ -11,17 +14,21 @@ class CameraImager {
         private val logger = LoggerFactory.getLogger(CameraImager::class.java)
     }
 
-    private val camera = Webcam.getDefault()
-            .also { camera ->
-                camera.open()
-            }
-
-    fun captureImage(): BufferedImage {
-        return camera.image
-    }
+    private val camera = VideoCapture(0)
 
     fun captureImageBytes(): ByteBuffer {
-        return camera.imageBytes
+        return Mat()
+                .also { matrix ->
+                    camera.read(matrix)
+                }
+                .let { matrix ->
+                    (BufferedImage(matrix.width(),
+                            matrix.height(), BufferedImage.TYPE_3BYTE_BGR)
+                            .raster.dataBuffer as DataBufferByte).data
+                }
+                .let { byteArray ->
+                    ByteBuffer.wrap(byteArray)
+                }
                 .also { imageBytes ->
                     logger.info("Image captured: ${imageBytes.position()}")
                 }
