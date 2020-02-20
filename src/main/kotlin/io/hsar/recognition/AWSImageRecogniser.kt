@@ -15,7 +15,7 @@ class AWSImageRecogniser {
 
     private val webcamImager = CameraImager()
 
-    fun analyseImage(imageBytes: ByteBuffer = webcamImager.captureImageBytes()) {
+    fun analyseImage(imageBytes: ByteBuffer = webcamImager.captureUntilNotBlack()) {
         // TODO: Persist in S3?
         Image().withBytes(imageBytes)
                 .let { image ->
